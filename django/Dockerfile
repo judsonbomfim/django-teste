@@ -10,14 +10,13 @@ ENV PYTHONUNBUFFERED=1
 WORKDIR /djangoapp
 
 COPY . /djangoapp
+COPY . /nginx
 
 COPY entrypoint.sh ./scripts/entrypoint.sh 
 RUN chmod +x /djangoapp/scripts/entrypoint.sh
 
 COPY wait-for-it.sh ./usr/local/bin/wait-for-it.sh
 RUN chmod +x /usr/local/bin/wait-for-it.sh
-
-COPY nginx.conf ./etc/nginx/nginx.conf
 
 RUN pip install --no-cache-dir -r requirements.txt
 
