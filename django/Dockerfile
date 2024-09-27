@@ -14,10 +14,12 @@ COPY . /djangoapp
 COPY entrypoint.sh ./scripts/entrypoint.sh 
 RUN chmod +x /djangoapp/scripts/entrypoint.sh
 
-COPY wait-for-it.sh /usr/local/bin/wait-for-it.sh
+COPY wait-for-it.sh ./usr/local/bin/wait-for-it.sh
 RUN chmod +x /usr/local/bin/wait-for-it.sh
+
+COPY nginx.conf ./etc/nginx/nginx.conf
 
 RUN pip install --no-cache-dir -r requirements.txt
 
-ENTRYPOINT ["wait-for-it.sh", "redis:6379", "--", "/djangoapp/scripts/entrypoint.sh"]
+ENTRYPOINT ["/usr/local/bin/wait-for-it.sh", "redis:6379", "--", "/djangoapp/scripts/entrypoint.sh"]
 CMD ["gunicorn", "--bind", "0.0.0.0:8000", "core.wsgi:application"]
