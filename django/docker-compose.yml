@@ -1,0 +1,49 @@
+version: '3.8'
+
+services:
+  web:
+    container_name: djangoapp
+    build: ./django
+    command: /djangoapp/scripts/entrypoint.sh
+    ports:
+      - "8000:8000"
+    env_file:
+      - ./.env
+    depends_on:
+      - redis
+      - nginx
+  redis:
+    container_name: redis
+    image: redis:7.2.4-alpine
+    volumes:
+      - redis-data:/data
+      - ./redis.conf:/usr/local/etc/redis/redis.conf
+    ports:
+      - "6379:6379"
+    command: redis-server /usr/local/etc/redis/redis.conf
+  nginx:
+    container_name: nginx
+    image: nginx:latest
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+      - ./nginx/ssl.conf:/etc/nginx/conf.d/ssl.conf
+      - certbot-etc:/etc/letsencrypt
+      - certbot-var:/var/lib/letsencrypt
+    ports:
+      - "80:80"
+      - "443:443"
+    depends_on:
+      - web
+  certbot:
+    container_name: certbot
+    build: ./certbot
+    volumes:
+      - certbot-etc:/etc/letsencrypt
+      - certbot-var:/var/lib/letsencrypt
+      - ./nginx/ssl.conf:/etc/nginx/conf.d/ssl.conf
+    entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"
+
+volumes:
+  redis-data:
+  certbot-etc:
+  certbot-var:
