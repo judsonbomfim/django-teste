@@ -18,5 +18,5 @@ RUN chmod +x /wait-for-it.sh
 
 RUN pip install --no-cache-dir -r requirements.txt
 
-ENTRYPOINT ["./wait-for-it.sh", "redis:6379", "--", "/djangoapp/scripts/entrypoint.sh"]
+ENTRYPOINT ["wait-for-it.sh", "redis:6379", "--", "/djangoapp/scripts/entrypoint.sh"]
 CMD ["gunicorn", "--bind", "0.0.0.0:8000", "core.wsgi:application"]
