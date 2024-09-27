@@ -1,6 +1,7 @@
 FROM python:3.12.1-slim-bullseye
 RUN apt-get update && apt-get install -y cron nano\
     apt-utils \
+    netcat \
     && apt-get install -y cron nano \
     && rm -rf /var/lib/apt/lists/*
 
