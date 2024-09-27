@@ -14,7 +14,7 @@ services:
     image: redis:7.2.4-alpine
     volumes:
       - redis-data:/data
-      - ./redis.conf:/usr/local/etc/redis/redis.conf
+      - /redis.conf:/usr/local/etc/redis/redis.conf
     ports:
       - "6379:6379"
     command: redis-server /usr/local/etc/redis/redis.conf
@@ -38,7 +38,7 @@ services:
     volumes:
       - certbot-etc:/etc/letsencrypt
       - certbot-var:/var/lib/letsencrypt
-      - ./nginx/ssl.conf:/etc/nginx/conf.d/ssl.conf
+      - /nginx/ssl.conf:/etc/nginx/conf.d/ssl.conf
     entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"
 
 volumes:
