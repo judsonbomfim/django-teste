@@ -10,7 +10,7 @@ WORKDIR /djangoapp
 
 COPY . /djangoapp
 COPY entrypoint.sh ./scripts/entrypoint.sh
-COPY wait-for-it.sh ./scripts/wait-for-it.sh
+COPY ./wait-for-it.sh ./wait-for-it.sh
     
 
 RUN chmod +x /djangoapp/scripts/entrypoint.sh
