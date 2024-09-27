@@ -22,8 +22,8 @@ services:
     container_name: nginx
     image: nginx:latest
     volumes:
-      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
-      - ./nginx/ssl.conf:/etc/nginx/conf.d/ssl.conf
+      - /nginx/nginx.conf:/etc/nginx/nginx.conf
+      - /nginx/ssl.conf:/etc/nginx/conf.d/ssl.conf
       - certbot-etc:/etc/letsencrypt
       - certbot-var:/var/lib/letsencrypt
     ports:
