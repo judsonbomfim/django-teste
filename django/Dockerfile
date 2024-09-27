@@ -12,10 +12,10 @@ WORKDIR /djangoapp
 COPY . /djangoapp
 
 COPY scripts/entrypoint.sh /djangoapp/scripts/entrypoint.sh 
-RUN chmod +x /djangoapp/scripts/entrypoint.sh
+RUN ls -l /djangoapp/scripts/entrypoint.sh && chmod +x /djangoapp/scripts/entrypoint.sh
 
 COPY scripts/wait-for-it.sh /usr/local/bin/wait-for-it.sh
-RUN chmod +x /usr/local/bin/wait-for-it.sh
+RUN ls -l /usr/local/bin/wait-for-it.sh && chmod +x /usr/local/bin/wait-for-it.sh
 
 RUN pip install --no-cache-dir -r requirements.txt
 
