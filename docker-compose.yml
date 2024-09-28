@@ -1,3 +1,4 @@
+
 services:
   web:
     container_name: djangoapp
@@ -11,10 +12,10 @@ services:
       - redis
   redis:
     container_name: redis
-    image: redis:7.2.4-alpine
+    image: redis:latest
     volumes:
       - redis-data:/data
-      - ./redis.conf:/usr/local/etc/redis/redis.conf
+      - /root/django-teste/redis.conf:/usr/local/etc/redis/redis.conf:ro
     ports:
       - "6379:6379"
     command: redis-server /usr/local/etc/redis/redis.conf
@@ -31,14 +32,22 @@ services:
       - "443:443"
     depends_on:
       - web
+      - redis
+      - certbot-run
   certbot:
-    container_name: certbot
-    build: ./certbot
+    image: certbot/certbot
     volumes:
       - certbot-etc:/etc/letsencrypt
       - certbot-var:/var/lib/letsencrypt
-      - ./nginx/ssl.conf:/etc/nginx/conf.d/ssl.conf
+      - ./certbot/www:/var/www/certbot
     entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"
+  certbot-run:
+    image: certbot/certbot
+    volumes:
+      - certbot-etc:/etc/letsencrypt
+      - certbot-var:/var/lib/letsencrypt
+      - ./certbot/www:/var/www/certbot
+    command: certonly --webroot --webroot-path=/var/www/certbot --email jmbomfimme@gmail.com --agree-tos --no-eff-email -d painel.worldchip.com.br
 
 volumes:
   redis-data:
