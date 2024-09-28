@@ -12,7 +12,7 @@ services:
       - redis
   redis:
     container_name: redis
-    image: redis:7.2.4-alpine
+    image: redis:latest
     volumes:
       - redis-data:/data
       - /root/django-teste/redis.conf:/usr/local/etc/redis/redis.conf:ro
